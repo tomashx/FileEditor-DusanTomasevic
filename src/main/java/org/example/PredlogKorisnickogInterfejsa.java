@@ -77,6 +77,8 @@ public class PredlogKorisnickogInterfejsa extends JDialog {
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
+    /* CUVANJE FAJLA IZ NOVE SEKCIJE */
+
     public void saveFileNew(String directory, String filename) {
         if ((filename == null) || (filename.length() == 0))
             return;
@@ -116,11 +118,116 @@ public class PredlogKorisnickogInterfejsa extends JDialog {
         f.dispose(); // Get rid of the dialog box
     }
 
+    /* UCITAVANJE GORNJE SEKCIJE */
+    public void loadAndDisplayFileTop(String directory, String filename) {
+        if ((filename == null) || (filename.length() == 0))
+            return;
+        File file;
+        FileReader in = null;
+        // Read and display the file contents. Since we're reading text, we
+        // use a FileReader instead of a FileInputStream.
+        try {
+            file = new File(directory, filename); // Create a file object
+            in = new FileReader(file); // And a char stream to read it
+            char[] buffer = new char[4096]; // Read 4K characters at a time
+            int len; // How many chars read each time
+            textAreaTop.setText(""); // Clear the text area
+            while ((len = in.read(buffer)) != -1) { // Read a batch of chars
+                String s = new String(buffer, 0, len); // Convert to a string
+                textAreaTop.append(s); // And display them
+            }
+            this.setTitle("FileViewer: " + filename); // Set the window title
+            textAreaTop.setCaretPosition(0); // Go to start of file
+        }
+        // Display messages if something goes wrong
+        catch (IOException e) {
+            textAreaTop.setText(e.getClass().getName() + ": " + e.getMessage());
+            this.setTitle("FileViewer: " + filename + ": I/O Exception");
+        }
+        // Always be sure to close the input stream!
+        finally {
+            try {
+                if (in != null)
+                    in.close();
+            } catch (IOException e) {
+            }
+        }
+    }
+
+    private void onOpenTopButton() {
+        // Create a file dialog box to prompt for a new file to display
+        FileDialog f = new FileDialog(this, "Otvori fajl", FileDialog.LOAD);
+        f.setDirectory(directory); // Set the default directory
+        // Display the dialog and wait for the user's response
+        f.setVisible(true);
+        directory = f.getDirectory(); // Remember new default directory
+        loadAndDisplayFileTop(directory, f.getFile()); // Load and display selection
+        f.dispose(); // Get rid of the dialog box
+    }
+    /* UCITAVANJE DONJE SEKCIJE */
+    public void loadAndDisplayFileBottom(String directory, String filename) {
+        if ((filename == null) || (filename.length() == 0))
+            return;
+        File file;
+        FileReader in = null;
+        // Read and display the file contents. Since we're reading text, we
+        // use a FileReader instead of a FileInputStream.
+        try {
+            file = new File(directory, filename); // Create a file object
+            in = new FileReader(file); // And a char stream to read it
+            char[] buffer = new char[4096]; // Read 4K characters at a time
+            int len; // How many chars read each time
+            textAreaBottom.setText(""); // Clear the text area
+            while ((len = in.read(buffer)) != -1) { // Read a batch of chars
+                String s = new String(buffer, 0, len); // Convert to a string
+                textAreaBottom.append(s); // And display them
+            }
+            this.setTitle("FileViewer: " + filename); // Set the window title
+            textAreaBottom.setCaretPosition(0); // Go to start of file
+        }
+        // Display messages if something goes wrong
+        catch (IOException e) {
+            textAreaBottom.setText(e.getClass().getName() + ": " + e.getMessage());
+            this.setTitle("FileViewer: " + filename + ": I/O Exception");
+        }
+        // Always be sure to close the input stream!
+        finally {
+            try {
+                if (in != null)
+                    in.close();
+            } catch (IOException e) {
+            }
+        }
+    }
+
+    private void onOpenBottomButton() {
+        // Create a file dialog box to prompt for a new file to display
+        FileDialog f = new FileDialog(this, "Otvori fajl", FileDialog.LOAD);
+        f.setDirectory(directory); // Set the default directory
+        // Display the dialog and wait for the user's response
+        f.setVisible(true);
+        directory = f.getDirectory(); // Remember new default directory
+        loadAndDisplayFileBottom(directory, f.getFile()); // Load and display selection
+        f.dispose(); // Get rid of the dialog box
+    }
 
     private void onButtonClose() {
         // add your code here if necessary
         dispose();
     }
+
+    /* KOPIRANJE GORNJE SEKCIJE */
+    private void onTopNewButton()
+    {
+        selection = textAreaTop.getSelectedText();
+    }
+
+    /* KOPIRANJE DONJE SEKCIJE */
+    private void onBottomNewButton()
+    {
+        selection = textAreaBottom.getSelectedText();
+    }
+
     public static void main(String[] args) {
         PredlogKorisnickogInterfejsa dialog = new PredlogKorisnickogInterfejsa();
         dialog.pack();
