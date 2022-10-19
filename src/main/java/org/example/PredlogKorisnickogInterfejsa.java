@@ -14,16 +14,18 @@ public class PredlogKorisnickogInterfejsa extends JDialog {
     private JButton saveNewButton;
     private JButton openTopButton;
     private JButton openBottomButton;
-    private JButton topNewButton;
     private JButton bottomNewButton;
+    private JButton allFromBottomNewButton;
     private JTextArea textAreaTop;
     private JTextArea textAreaBottom;
     private JTextArea textAreaNew;
+    private JButton allFromTopNewButton;
+    private JButton topNewButton;
 
 
     String directory; //Default directory
 
-    String selection;
+    String selectionTop, selectionBottom;
 
     public PredlogKorisnickogInterfejsa() {
         setContentPane(contentPane);
@@ -51,8 +53,18 @@ public class PredlogKorisnickogInterfejsa extends JDialog {
             }
         });
 
+        allFromTopNewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {onAllFromTopNewButton();
+            }
+        });
+
         topNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {onTopNewButton();
+            }
+        });
+
+        allFromBottomNewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {onAllFromBottomNewButton();
             }
         });
 
@@ -216,16 +228,32 @@ public class PredlogKorisnickogInterfejsa extends JDialog {
         dispose();
     }
 
-    /* KOPIRANJE GORNJE SEKCIJE */
-    private void onTopNewButton()
+    /* KOPIRANJE CELE GORNJE SEKCIJE */
+    private void onAllFromTopNewButton()
     {
-        selection = textAreaTop.getSelectedText();
+        selectionTop = textAreaTop.getText();
+        textAreaNew.append(selectionTop);
     }
 
-    /* KOPIRANJE DONJE SEKCIJE */
+    /* KOPIRANJE SELEKCIJE GORNJE SEKCIJE */
+    private void onTopNewButton()
+    {
+        selectionTop = textAreaTop.getSelectedText();
+        textAreaNew.append(selectionTop);
+    }
+
+    /* KOPIRANJE CELE DONJE SEKCIJE */
+    private void onAllFromBottomNewButton()
+    {
+        selectionBottom = textAreaBottom.getText();
+        textAreaNew.append(selectionBottom);
+    }
+
+    /* KOPIRANJE SELEKCIJE DONJE SEKCIJE */
     private void onBottomNewButton()
     {
-        selection = textAreaBottom.getSelectedText();
+        selectionBottom = textAreaBottom.getSelectedText();
+        textAreaNew.append(selectionBottom);
     }
 
     public static void main(String[] args) {
