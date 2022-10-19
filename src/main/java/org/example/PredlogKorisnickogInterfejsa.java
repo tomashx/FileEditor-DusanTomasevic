@@ -6,12 +6,14 @@ import java.awt.event.*;
 public class PredlogKorisnickogInterfejsa extends JDialog {
     private JPanel contentPane;
     private JButton buttonClose;
-    private JButton buttonSave;
+    private JButton saveNewButton;
     private JButton buttonOpen;
-    private JButton buttonGetSelection;
+    private JButton topNewButton;
     private JTextArea textAreaTop;
     private JTextArea textAreaBottom;
     private JTextArea textAreaNew;
+    private JButton openBottomButton;
+    private JButton bottomNewButton;
 
     public PredlogKorisnickogInterfejsa() {
         setContentPane(contentPane);
