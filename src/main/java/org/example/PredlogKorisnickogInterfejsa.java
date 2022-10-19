@@ -1,24 +1,43 @@
 package org.example;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class PredlogKorisnickogInterfejsa extends JDialog {
     private JPanel contentPane;
     private JButton buttonClose;
     private JButton saveNewButton;
-    private JButton buttonOpen;
+    private JButton openTopButton;
+    private JButton openBottomButton;
     private JButton topNewButton;
+    private JButton bottomNewButton;
     private JTextArea textAreaTop;
     private JTextArea textAreaBottom;
     private JTextArea textAreaNew;
-    private JButton openBottomButton;
-    private JButton bottomNewButton;
+
+    String directory; //Default directory
+
+    String selection;
 
     public PredlogKorisnickogInterfejsa() {
         setContentPane(contentPane);
         setModal(true);
         //    getRootPane().setDefaultButton(buttonOpen);
+
+        openTopButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {onOpenTopButton();
+            }
+        });
+
+        openBottomButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {onOpenBottomButton();
+            }
+        });
 
         buttonClose.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -26,6 +45,15 @@ public class PredlogKorisnickogInterfejsa extends JDialog {
             }
         });
 
+        topNewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {onTopNewButton();
+            }
+        });
+
+        bottomNewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {onBottomNewButton();
+            }
+        });
 
         // call onCancel() when cross is clicked
         addWindowListener(new WindowAdapter() {
@@ -34,6 +62,13 @@ public class PredlogKorisnickogInterfejsa extends JDialog {
             }
         });
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+
+        // call onCancel() on ESCAPE
+        contentPane.registerKeyboardAction(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onButtonClose();
+            }
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
     private void onButtonClose() {
