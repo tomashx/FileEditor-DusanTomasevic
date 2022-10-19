@@ -20,6 +20,7 @@ public class PredlogKorisnickogInterfejsa extends JDialog {
     private JTextArea textAreaBottom;
     private JTextArea textAreaNew;
 
+
     String directory; //Default directory
 
     String selection;
@@ -28,6 +29,11 @@ public class PredlogKorisnickogInterfejsa extends JDialog {
         setContentPane(contentPane);
         setModal(true);
         //    getRootPane().setDefaultButton(buttonOpen);
+
+        saveNewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {onSaveNewButton();
+            }
+        });
 
         openTopButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {onOpenTopButton();
@@ -70,6 +76,46 @@ public class PredlogKorisnickogInterfejsa extends JDialog {
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
+
+    public void saveFileNew(String directory, String filename) {
+        if ((filename == null) || (filename.length() == 0))
+            return;
+        File file;
+        FileWriter out = null;
+        try {
+            file = new File(directory, filename); // Create a file object
+            out = new FileWriter(file); // And a char stream to write it
+            textAreaNew.getLineCount(); // Get text from the text area
+            String s = textAreaNew.getText();
+            out.write(s);
+        }
+        // Display messages if something goes wrong
+        catch (IOException e) {
+            textAreaNew.setText(e.getClass().getName() + ": " + e.getMessage());
+            this.setTitle("FileViewer: " + filename + ": I/O Exception");
+        }
+        // Always be sure to close the input stream!
+        finally {
+            try {
+                if (out != null)
+                    out.close();
+            }
+            catch (IOException e) {
+            }
+        }
+    }
+
+    private void onSaveNewButton() {
+        // Create a file dialog box to prompt for a new file to display
+        FileDialog f = new FileDialog(this, "Otvori fajl", FileDialog.SAVE);
+        f.setDirectory(directory); // Set the default directory
+        // Display the dialog and wait for the user's response
+        f.setVisible(true);
+        directory = f.getDirectory(); // Remember new default directory
+        saveFileNew(directory, f.getFile()); // Load and display selection
+        f.dispose(); // Get rid of the dialog box
+    }
+
 
     private void onButtonClose() {
         // add your code here if necessary
